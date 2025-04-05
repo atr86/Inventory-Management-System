@@ -1,4 +1,8 @@
-lass contract {
+import java.io.PrintWriter;
+import java.io.*;
+import java.util.*;
+
+class contract {
 
     seller s; // Add a seller reference
     static int no;

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class customer {
 	String name;
 	String gst;
