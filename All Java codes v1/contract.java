@@ -1,6 +1,7 @@
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.io.*;
-import java.util.*;
 
 class contract {
 
@@ -24,7 +25,7 @@ class contract {
 
 
     public void header() {
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename))) {
+        try (PrintWriter writer = new PrintWriter(filename)) {
             writer.printf("%-10s", "Contract Receipt\n");
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -54,7 +55,7 @@ class contract {
         // }
         tno++;
         double price;
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename, true))) { // Open in append mode
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename, true))) { // Open in append mode
             price = se.q * se.pp; // Calculate price based on quantity and proposed price
             writer.printf("%-10d %-15s %-20d %-8.2f\n", tno, se.item, se.q, price);
             writer.println(); // Blank line
@@ -65,7 +66,7 @@ class contract {
     }
 
     void trailer() {
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(filename, true))) { // Open in append mode
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename, true))) { // Open in append mode
             writer.printf("%-47s %-8.2f\n", "Total Amount:", sum);
             writer.println(); // Blank line.
             double gst = sum * 0.18;

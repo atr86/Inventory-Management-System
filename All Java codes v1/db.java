@@ -1,11 +1,16 @@
-class db 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class db 
 {
 	static int itemid[];
 	static String name[];
 	static int q[];
 	static double price[];
 	static int n;
-	db(int n1)
+	public db(int n1)
 	{
 		name= new String[n1];
 		itemid= new int[n1];
@@ -13,7 +18,7 @@ class db
 		price=new double[n1];
 	}
 	
-	void initialize()
+	public void initialize()
 	{
 		String line, filePath="database.csv";
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
@@ -62,7 +67,7 @@ class db
     }
 
     
-    static int searchName(String item)
+    public static int searchName(String item)
     {
     	for(int i=0;i<n;i++)
     	{
@@ -71,7 +76,7 @@ class db
     	}
     	return -9999;
     }
-	static String getName(int x)
+	public static String getName(int x)
 	{
 		for(int i=0;i<n;i++)
 		{
@@ -80,7 +85,7 @@ class db
 		}
 		return ""; // Return a null value if no match is found
 	}
-    static int getQuantity(int x)
+    public static int getQuantity(int x)
     {
     	for(int i=0;i<n;i++)
     	{
@@ -90,7 +95,7 @@ class db
     	return -9999;
     }
     
-    static void withdraw(int id, int n)
+    public static void withdraw(int id, int n)
     {
     	for(int i=0;i<n;i++)
     	{
@@ -102,7 +107,7 @@ class db
     	}
     }
     
-    static double getPrice(int id)
+    public static double getPrice(int id)
     {
     	for(int i=0;i<n;i++)
     	{
@@ -130,18 +135,18 @@ class db
 	{
 		 int i;
 		 String filename="database.csv";
-		 try(PrintWriter writer = new PrintWriter(new FileOutputStream(filename)))
+		 try(PrintWriter writer = new PrintWriter(filename))
 		 {
 			for(i=0;i<n;i++)
 			{
 				String line=name[i]+","+itemid[i]+","+q[i]+","+price[i];
 				writer.println(line);	
-		 	}
-	    }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
     }
     static void setQuantity(int id, int q1)
         {
@@ -156,7 +161,7 @@ class db
         return;
         }
 	
-    static int getItemid(int index)
+    public static int getItemid(int index)
         {
             return itemid[index];
         }

@@ -45,11 +45,10 @@ class sell
                  System.out.println("Offer Accepted");
                  status = true;
                  db.n++;
-                 db.add(itemid,item,q,sp);
-                //  db.itemid[db.n - 1] = itemid;
-                //  db.name[db.n - 1] = item;
-                //  db.price[db.n - 1] = sp;
-                //  db.q[db.n - 1] = q;
+                 db.itemid[db.n - 1] = itemid;
+                 db.name[db.n - 1] = item;
+                 db.price[db.n - 1] = sp;
+                 db.q[db.n - 1] = q;
              }
              else
              {
