@@ -11,7 +11,7 @@ This project helps to manage inventory for both sellers and customers with autom
 -  **Database Integration**: Uses `SQLite` database (`inventory.db`) for persistent storage.  
 -  **Python Database Wrapper**:
   - A subprocess to a python module that interacts with database, fetches query result in realtime and returns result to main java mosule handling it.
-  - Convert CSV ↔ Database (`convert_csvtodb.py`, `convert_dbtocsv.py`).  The database stae can be stored manually into csv, from which db is created,
+  - Convert CSV ↔ Database (`convert_csvtodb.py`, `convert_dbtocsv.py`).  The database state can be stored manually into csv, from which db is created,
   - and after the completion of execution of the application, is reconverted and stored into the csv for easy access.
 
 ---
