@@ -111,10 +111,8 @@ def explain_result(question: str, sql: str, rows: list[tuple], all_data: list[tu
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
-    schema   = get_schema()
-    question = input("Ask a question about inventory: ").strip()
-
+def handle_question(question: str, schema: str) -> None:
+    """Process a single NL question: generate SQL, run it, explain it."""
     sql = nl_to_sql(question, schema)
 
     if sql == "CANNOT_GENERATE":
@@ -136,3 +134,30 @@ if __name__ == "__main__":
             print(f"Blocked: {e}")
         except Exception as e:
             print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    import sys
+
+    schema = get_schema()
+
+    # --repl mode: spawned by Java via ProcessBuilder.
+    # Reads questions line-by-line from stdin; exits on "quit".
+    # stdout is flushed after every response so the Java reader never blocks.
+    if "--repl" in sys.argv:
+        print("nl_to_sql ready. Send questions via stdin (type 'quit' to exit).", flush=True)
+        for line in sys.stdin:
+            question = line.strip()
+            if not question:
+                continue
+            if question.lower() == "quit":
+                print("Exiting nl_to_sql.", flush=True)
+                break
+            handle_question(question, schema)
+            # Flush so Java's output drainer thread receives the full response
+            sys.stdout.flush()
+
+    # Interactive single-question mode (direct use from terminal)
+    else:
+        question = input("Ask a question about inventory: ").strip()
+        handle_question(question, schema)
