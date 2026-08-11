@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,5 +272,60 @@ class db {
             System.out.println("Database saved to database.csv");
         }
 
+    }
+
+    /**
+     * Starts nl_to_sql.py as a subprocess and keeps a conversation loop alive.
+     * Each question is written to the process stdin; stdout/stderr are printed live.
+     * The loop ends when the user types "quit" (case-insensitive).
+     *
+     * @param br The BufferedReader connected to System.in
+     */
+    public static void runNlToSqlSession(BufferedReader br) throws Exception {
+        ProcessBuilder pb = new ProcessBuilder(syscall, "nl_to_sql.py", "--repl");
+        pb.directory(new java.io.File("."));
+        pb.redirectErrorStream(true); // merge stderr into stdout
+        Process process = pb.start();
+
+        // Writer to send questions into the subprocess stdin
+        BufferedWriter processIn = new BufferedWriter(
+                new OutputStreamWriter(process.getOutputStream()));
+
+        // Reader to receive the subprocess output
+        BufferedReader processOut = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+
+        // Drain subprocess output in a background thread so it never blocks
+        Thread outputDrainer = new Thread(() -> {
+            try {
+                String line;
+                while ((line = processOut.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException ignored) {
+            }
+        });
+        outputDrainer.setDaemon(true);
+        outputDrainer.start();
+
+        // Main question-answer loop
+        while (true) {
+            System.out.print("\nYour question (or 'quit'): ");
+            String question = br.readLine();
+            if (question == null || question.trim().equalsIgnoreCase("quit")) {
+                processIn.write("quit\n");
+                processIn.flush();
+                break;
+            }
+            processIn.write(question + "\n");
+            processIn.flush();
+            // Small pause so the drainer thread can print the response
+            // before the next prompt appears
+            Thread.sleep(4000);
+        }
+
+        processIn.close();
+        process.waitFor();
+        System.out.println("\nAI Investigator session ended.");
     }
 }
