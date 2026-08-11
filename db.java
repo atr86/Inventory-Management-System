@@ -5,7 +5,7 @@ import java.util.List;
 
 class db {
     private static final String DB_NAME = "inventory.db";
-
+    private static final String syscall = "py";
     public db() {
         // Initialize the database when creating a db object
         initialize();
@@ -18,7 +18,7 @@ class db {
         try {
             String line;
             StringBuilder result = new StringBuilder();
-            ProcessBuilder pb = new ProcessBuilder("python", "convert_csvtodb.py");
+            ProcessBuilder pb = new ProcessBuilder(syscall, "convert_csvtodb.py");
             Process process = pb.start();
             // Wait for process to complete
             int exitCode = process.waitFor();
@@ -247,7 +247,7 @@ class db {
          try {
             String line;
             StringBuilder result = new StringBuilder();
-            ProcessBuilder pb = new ProcessBuilder("python", "convert_dbtocsv.py");
+            ProcessBuilder pb = new ProcessBuilder(syscall, "convert_dbtocsv.py");
             Process process = pb.start();
             // Wait for process to complete
             int exitCode = process.waitFor();

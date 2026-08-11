@@ -3,13 +3,14 @@ import java.io.InputStreamReader;
 
 public class DBClient {
     /**
-     
+   
 Executes an SQL query via the Python wrapper and returns the result
 @param sql The SQL query to execute
 @return The query result as a string*/
+private static final String syscall = "py";
 public static String executeQuery(String sql) {
     try {// Run Python script with query as argument
-        ProcessBuilder pb = new ProcessBuilder("python", "db_wrapper.py", sql);
+        ProcessBuilder pb = new ProcessBuilder(syscall, "db_wrapper.py", sql);
         Process process = pb.start();
 
             // Capture output from Python
